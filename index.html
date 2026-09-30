@@ -43,7 +43,7 @@
 * { box-sizing: border-box; }
 body { background: var(--bg); color: var(--ink); font: 400 17px/1.6 var(--sans); overflow-x: hidden; }
 .in { max-width: 1200px; margin-inline: auto; padding-inline: 20px; }
-h1, h2, h3 { font-family: var(--sans); margin: 0; font-weight: 600; letter-spacing: -0.04em; line-height: 1.02; text-wrap: balance; }
+h1, h2, h3 { font-family: var(--sans); margin: 0; font-weight: 600; letter-spacing: -0.025em; line-height: 1.08; text-wrap: balance; }
 p { margin: 0; }
 a { color: inherit; }
 :focus-visible { outline: 3px solid var(--accent-text); outline-offset: 3px; border-radius: var(--r); }
@@ -59,13 +59,13 @@ a { color: inherit; }
 
 /* NAV */
 nav { display: flex; align-items: center; justify-content: space-between; height: 68px; }
-.brand { display: flex; align-items: center; gap: 10px; font: 700 20px/1 var(--sans); letter-spacing: -0.04em; text-decoration: none; }
+.brand { display: flex; align-items: center; gap: 10px; font: 700 20px/1 var(--sans); letter-spacing: -0.02em; text-decoration: none; }
 .brand svg { width: 32px; height: 32px; display: block; }
 nav .btn { padding: 12px 18px; font-size: 15px; }
 
 /* HERO */
 .hero { min-height: calc(100dvh - 68px); display: grid; grid-template-columns: 1.2fr .8fr; gap: 48px; align-items: center; padding-block: 24px 64px; }
-h1 { font-size: clamp(32px, 4.4vw, 64px); line-height: .98; white-space: nowrap; }
+h1 { font-size: clamp(32px, 4.4vw, 64px); line-height: 1.06; white-space: nowrap; }
 h1 span { color: var(--accent-text); }
 .lead { margin-top: 24px; max-width: 30em; font-size: 19px; color: var(--muted); }
 .cta { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 32px; }
@@ -91,8 +91,8 @@ h1 span { color: var(--accent-text); }
 
 /* PROBLEMA: tipografía a ancho completo */
 .pain { padding-block: 120px; border-top: 1px solid var(--line); }
-.pain h2 { font-size: clamp(34px, 7.4vw, 108px); line-height: .96; color: var(--muted); }
-.pain h2 + h2 { margin-top: .12em; }
+.pain h2 { font-size: clamp(28px, 5.6vw, 84px); line-height: 1.12; color: var(--muted); }
+.pain h2 + h2 { margin-top: .16em; }
 .pain h2.now { color: var(--ink); }
 .pain h2.turn { color: var(--accent-text); }
 
@@ -149,11 +149,14 @@ h1 span { color: var(--accent-text); }
 .bento { margin-top: 44px; display: grid; grid-template-columns: 1.15fr 1fr; grid-template-rows: repeat(3, auto); gap: 14px; }
 .cell { border-radius: var(--r); padding: 26px; display: flex; flex-direction: column; justify-content: space-between; gap: 18px; min-width: 0; background: var(--surface); border: 1px solid var(--line); }
 .cell .nm { font: 500 15px/1.3 var(--sans); color: var(--muted); }
-.cell .pr { font: 600 clamp(30px, 3.4vw, 44px)/1 var(--sans); letter-spacing: -0.04em; font-variant-numeric: tabular-nums; }
+.cell .pr { display: block; font: 600 clamp(30px, 3.4vw, 44px)/1 var(--sans); letter-spacing: -0.03em; font-variant-numeric: tabular-nums; }
 .cell .nt { font-size: 15px; color: var(--muted); }
 .cell.big { grid-row: 1 / span 3; background: var(--accent); border-color: var(--accent); color: var(--on-accent); padding: 34px; }
 .cell.big .nm, .cell.big .nt { color: rgba(255,255,255,.82); }
-.cell.big .pr { font-size: clamp(48px, 7vw, 92px); }
+.cell.big .pr { font-size: clamp(44px, 5.6vw, 76px); }
+.cell .foot { display: grid; gap: 10px; }
+.incl { list-style: none; margin: 0; padding: 0; display: grid; gap: 12px; font-size: 17px; }
+.incl li { padding-top: 12px; border-top: 1px solid rgba(255,255,255,.28); }
 .cell.tint { background: var(--tint); border-color: transparent; }
 .cell.dash { background: transparent; border-style: dashed; }
 .note { margin-top: 20px; color: var(--muted); font-size: 15px; }
@@ -162,14 +165,13 @@ h1 span { color: var(--accent-text); }
 .fit { padding-block: 100px; border-top: 1px solid var(--line); }
 .chips { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 32px; }
 .chips span { padding: 12px 18px; border-radius: var(--r); background: var(--surface); border: 1px solid var(--line); font: 500 17px/1 var(--sans); }
-.chips span:nth-child(3n+1) { background: var(--tint); border-color: transparent; }
 
 /* FAQ */
 .faq-sec { padding-block: 100px; border-top: 1px solid var(--line); }
 .faq { margin-top: 36px; max-width: 800px; }
 details { border-top: 1px solid var(--line); padding-block: 22px; }
 details:last-child { border-bottom: 1px solid var(--line); }
-summary { cursor: pointer; font: 600 clamp(18px, 2vw, 22px)/1.3 var(--sans); letter-spacing: -0.02em; list-style: none; display: flex; justify-content: space-between; gap: 16px; }
+summary { cursor: pointer; font: 600 clamp(18px, 2vw, 22px)/1.3 var(--sans); letter-spacing: -0.01em; list-style: none; display: flex; justify-content: space-between; gap: 16px; }
 summary::-webkit-details-marker { display: none; }
 summary::after { content: "+"; font: 400 26px/1 var(--mono); color: var(--accent-text); transition: transform .3s var(--ease); }
 details[open] summary::after { transform: rotate(45deg); }
@@ -177,7 +179,7 @@ details p { margin-top: 12px; color: var(--muted); max-width: 38em; }
 
 /* CIERRE */
 .close { background: var(--accent); color: var(--on-accent); padding-block: 110px; }
-.close h2 { font-size: clamp(38px, 7vw, 104px); max-width: 11em; line-height: .96; }
+.close h2 { font-size: clamp(36px, 6.2vw, 92px); max-width: 12em; line-height: 1.08; }
 .close p { margin-top: 24px; max-width: 30em; font-size: 20px; color: rgba(255,255,255,.88); }
 .close .cta { align-items: center; margin-top: 36px; }
 .close .num { font: 500 20px/1 var(--mono); user-select: all; }
@@ -294,10 +296,12 @@ html{color-scheme:light dark}body{margin:0}img{max-width:100%}[hidden]{display:n
     <h2 class="rv">Pagás una vez.<br>Sin abono.</h2>
     <p class="sub rv">Con el logo de tu local, el link configurado y la instalación incluida en Mar del Plata.</p>
     <div class="bento">
-      <div class="cell big rv"><span class="nm">Pack Mesas x5</span><div><span class="pr">$60.000</span><p class="nt" style="margin-top:10px">$12.000 por pieza. Una en cada mesa.</p></div></div>
-      <div class="cell rv"><span class="nm">Pieza suelta</span><span class="pr">$15.000</span></div>
-      <div class="cell tint rv"><span class="nm">Pack Local x10</span><div><span class="pr">$100.000</span><p class="nt" style="margin-top:8px">Incluye la carta digital con NFC y QR.</p></div></div>
-      <div class="cell dash rv"><span class="nm">Reposición</span><div><span class="pr">$10.000</span><p class="nt" style="margin-top:8px">Si una se rompe o se pierde.</p></div></div>
+      <div class="cell big rv"><span class="nm">Pack Mesas x5</span>
+        <ul class="incl"><li>5 piezas con NFC y QR</li><li>Logo de tu local en cada una</li><li>Link de Google configurado</li><li>Instalación en tu local</li></ul>
+        <div class="foot"><span class="pr">$60.000</span><p class="nt">$12.000 por pieza. Una en cada mesa.</p></div></div>
+      <div class="cell rv"><span class="nm">Pieza suelta</span><div class="foot"><span class="pr">$15.000</span><p class="nt">Con NFC, QR, logo e instalación.</p></div></div>
+      <div class="cell tint rv"><span class="nm">Pack Local x10</span><div class="foot"><span class="pr">$100.000</span><p class="nt">Incluye la carta digital con NFC y QR.</p></div></div>
+      <div class="cell dash rv"><span class="nm">Reposición</span><div class="foot"><span class="pr">$10.000</span><p class="nt">Si una se rompe o se pierde.</p></div></div>
     </div>
     <p class="note">Precios de referencia en pesos, sujetos a cambio.</p>
   </div>
