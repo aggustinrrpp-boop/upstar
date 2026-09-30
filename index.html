@@ -1,0 +1,427 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>UpStar | Reseñas de Google con un toque</title>
+<meta name="description" content="Piezas NFC y QR para que tus clientes califiquen tu local en Google acercando el celular. Mar del Plata.">
+<meta property="og:title" content="UpStar">
+<meta property="og:description" content="Un toque, cinco estrellas. Piezas NFC y QR para reseñas de Google en Mar del Plata.">
+<meta property="og:image" content="https://aggustinrrpp-boop.github.io/upstar/img/mesa.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500&display=swap">
+<style>
+/* Design read: landing de ventas para dueños de restaurantes (MdP), tono directo y sobrio.
+   Dials: VARIANCE 7, MOTION 6, DENSITY 3. Un acento azul, neutros fríos, un solo radio (12px), sin serif.
+   Familias de layout: hero split, tipografía a ancho completo, demo sticky + texto, bento de precios, tira de rubros, acordeón, cierre a sangre. */
+:root {
+  --bg: #F5F6F9;
+  --surface: #FFFFFF;
+  --tint: #E8EDFD;
+  --ink: #0E1220;
+  --muted: #586078;
+  --line: #E0E4EE;
+  --accent: #2F55E0;
+  --accent-text: #2F55E0;
+  --on-accent: #FFFFFF;
+  --star: #F5B301;
+  --r: 12px;
+  --sans: "Geist", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --mono: "Geist Mono", ui-monospace, "Courier New", monospace;
+  --ease: cubic-bezier(.16, 1, .3, 1);
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0A0D16; --surface: #121726; --tint: #182248; --ink: #EAEEF8; --muted: #9AA3BA; --line: #232B40;
+    --accent: #4867EE; --accent-text: #8AA1FF; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0A0D16; --surface: #121726; --tint: #182248; --ink: #EAEEF8; --muted: #9AA3BA; --line: #232B40;
+  --accent: #4867EE; --accent-text: #8AA1FF; color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body { background: var(--bg); color: var(--ink); font: 400 17px/1.6 var(--sans); overflow-x: hidden; }
+.in { max-width: 1200px; margin-inline: auto; padding-inline: 20px; }
+h1, h2, h3 { font-family: var(--sans); margin: 0; font-weight: 600; letter-spacing: -0.04em; line-height: 1.02; text-wrap: balance; }
+p { margin: 0; }
+a { color: inherit; }
+:focus-visible { outline: 3px solid var(--accent-text); outline-offset: 3px; border-radius: var(--r); }
+.btn { display: inline-flex; align-items: center; white-space: nowrap; font: 600 16px/1 var(--sans); padding: 16px 24px; border-radius: var(--r); background: var(--accent); color: var(--on-accent); text-decoration: none; border: 0; cursor: pointer; transition: transform .3s var(--ease), background .2s; }
+.btn:hover { transform: translateY(-2px); }
+.btn:active { transform: translateY(1px) scale(.98); }
+.btn.quiet { background: transparent; color: var(--ink); box-shadow: inset 0 0 0 1.5px var(--line); }
+.btn.on-accent { background: #fff; color: #1B2F8F; }
+
+/* reveal */
+.rv { transition: transform .8s var(--ease), opacity .8s var(--ease); }
+.rv.pre { opacity: 0; transform: translateY(32px); }
+
+/* NAV */
+nav { display: flex; align-items: center; justify-content: space-between; height: 68px; }
+.brand { display: flex; align-items: center; gap: 10px; font: 700 20px/1 var(--sans); letter-spacing: -0.04em; text-decoration: none; }
+.brand svg { width: 32px; height: 32px; display: block; }
+nav .btn { padding: 12px 18px; font-size: 15px; }
+
+/* HERO */
+.hero { min-height: calc(100dvh - 68px); display: grid; grid-template-columns: 1.2fr .8fr; gap: 48px; align-items: center; padding-block: 24px 64px; }
+h1 { font-size: clamp(32px, 4.4vw, 64px); line-height: .98; white-space: nowrap; }
+h1 span { color: var(--accent-text); }
+.lead { margin-top: 24px; max-width: 30em; font-size: 19px; color: var(--muted); }
+.cta { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 32px; }
+.hero > div:first-child > * { animation: rise .9s var(--ease) both; }
+.hero > div:first-child > :nth-child(2) { animation-delay: .1s; }
+.hero > div:first-child > :nth-child(3) { animation-delay: .2s; }
+@keyframes rise { from { opacity: 0; transform: translateY(24px); } }
+
+/* ranking (mini interfaz del listado de Maps) */
+.rank { background: var(--surface); border: 1px solid var(--line); border-radius: var(--r); overflow: hidden; box-shadow: 0 40px 80px -40px rgba(20, 40, 140, .35); min-width: 0; }
+.rank .bar { padding: 14px 18px; border-bottom: 1px solid var(--line); font: 500 13px/1.2 var(--mono); color: var(--muted); }
+.rows { position: relative; height: 296px; }
+.row { position: absolute; left: 0; right: 0; height: 74px; display: grid; grid-template-columns: 28px 1fr auto; gap: 12px; align-items: center; padding-inline: 18px; border-bottom: 1px solid var(--line); background: var(--surface); transition: transform .7s var(--ease), background .3s; }
+.row .pos { font: 500 15px/1 var(--mono); color: var(--muted); }
+.row .nm { font: 600 16px/1.2 var(--sans); min-width: 0; letter-spacing: -0.01em; }
+.row .nm small { display: block; font: 400 13px/1.3 var(--sans); margin-top: 3px; color: var(--muted); letter-spacing: 0; }
+.row .sc { font: 600 20px/1 var(--sans); letter-spacing: -0.03em; font-variant-numeric: tabular-nums; }
+.row .sc::before { content: "★"; color: var(--star); font-size: 15px; margin-right: 4px; }
+.row.me { background: var(--tint); }
+.row.me .pos { color: var(--accent-text); }
+.rank .ft { padding: 14px 18px; font: 400 13px/1.3 var(--sans); display: flex; justify-content: space-between; gap: 10px; flex-wrap: wrap; color: var(--muted); }
+.rank .ft b { color: var(--accent-text); font-weight: 600; }
+
+/* PROBLEMA: tipografía a ancho completo */
+.pain { padding-block: 120px; border-top: 1px solid var(--line); }
+.pain h2 { font-size: clamp(34px, 7.4vw, 108px); line-height: .96; color: var(--muted); }
+.pain h2 + h2 { margin-top: .12em; }
+.pain h2.now { color: var(--ink); }
+.pain h2.turn { color: var(--accent-text); }
+
+/* FOTO */
+.shot { padding-block: 20px; }
+.shot img { display: block; width: 100%; height: auto; max-height: 640px; object-fit: cover; object-position: 50% 60%; border-radius: var(--r); }
+
+/* CÓMO: demo sticky + texto */
+.how { padding-block: 100px; border-top: 1px solid var(--line); }
+.how-grid { display: grid; grid-template-columns: .9fr 1.1fr; gap: 72px; align-items: start; }
+.sticky { position: sticky; top: 96px; }
+.how h2, .prices h2, .faq-sec h2, .fit h2 { font-size: clamp(30px, 4.4vw, 56px); }
+.items { display: grid; gap: 0; }
+.item { padding-block: 40px; border-top: 1px solid var(--line); }
+.item:first-child { border-top: 0; padding-top: 8px; }
+.item h3 { font-size: clamp(22px, 2.6vw, 30px); margin-bottom: 10px; }
+.item p { color: var(--muted); max-width: 34em; }
+.how h2 { margin-bottom: 32px; }
+
+.stage { position: relative; width: min(400px, 100%); height: 430px; margin-inline: auto; cursor: pointer; }
+.piece { position: absolute; left: 4%; top: 10px; width: 64%; aspect-ratio: 3 / 4; background: #0E1220; border-radius: var(--r); padding: 16px; display: flex; flex-direction: column; justify-content: space-between; box-shadow: 0 30px 50px -24px rgba(10,15,40,.6); color: #fff; }
+.piece .r { display: flex; justify-content: space-between; align-items: center; font: 700 14px/1 var(--sans); letter-spacing: -0.03em; }
+.nfc { position: relative; width: 38px; height: 38px; }
+.nfc svg { width: 100%; height: 100%; }
+.ring { position: absolute; inset: 0; border-radius: 50%; border: 2px solid #8AA1FF; opacity: 0; }
+[data-s="1"] .ring { animation: ring 1s ease-out; }
+@keyframes ring { from { transform: scale(.6); opacity: 1; } to { transform: scale(3.4); opacity: 0; } }
+.qr { background: #fff; border-radius: 8px; padding: 8px; width: 60%; margin-inline: auto; }
+.qr svg { display: block; width: 100%; height: auto; }
+.piece small { display: block; text-align: center; font: 400 11px/1.3 var(--mono); color: #B7C2E8; }
+.phone { position: absolute; right: 0; bottom: 0; width: 45%; aspect-ratio: 9 / 18.5; background: #05070F; border-radius: 26px; padding: 6px; box-shadow: 0 30px 50px -22px rgba(10,15,40,.6), inset 0 0 0 2px #2A3358; transform: translate(30px, 44px) rotate(12deg); transition: transform 1s var(--ease); }
+[data-s="1"] .phone, [data-s="2"] .phone, [data-s="3"] .phone { transform: translate(-58px, -6px) rotate(-4deg); }
+.screen { position: relative; width: 100%; height: 100%; background: #fff; border-radius: 20px; overflow: hidden; text-align: center; color: #0E1220; }
+.lock, .review { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 7px; padding: 10px; transition: opacity .4s; }
+.lock { font: 400 10px/1.3 var(--mono); color: #586078; }
+.lock b { font: 600 26px/1 var(--sans); color: #0E1220; letter-spacing: -0.03em; }
+[data-s="0"] .lock, [data-s="1"] .lock { opacity: 1; }
+[data-s="2"] .lock, [data-s="3"] .lock { opacity: 0; }
+[data-s="0"] .review, [data-s="1"] .review { opacity: 0; }
+.review .pl { font: 600 12px/1.2 var(--sans); }
+.review .as { font-size: 11px; color: #586078; }
+.stars { display: flex; gap: 1px; font-size: 21px; line-height: 1; }
+.stars i { font-style: normal; color: #D9DEEC; transition: color .25s; }
+[data-s="3"] .stars i { color: var(--star); }
+[data-s="3"] .stars i:nth-child(2) { transition-delay: .12s; }
+[data-s="3"] .stars i:nth-child(3) { transition-delay: .24s; }
+[data-s="3"] .stars i:nth-child(4) { transition-delay: .36s; }
+[data-s="3"] .stars i:nth-child(5) { transition-delay: .48s; }
+.pub { background: #2F55E0; color: #fff; font: 600 11px/1 var(--sans); padding: 8px 14px; border-radius: 8px; margin-top: 3px; }
+
+/* PRECIOS: bento de 4 celdas */
+.prices { padding-block: 100px; border-top: 1px solid var(--line); }
+.prices .sub { margin-top: 16px; color: var(--muted); max-width: 32em; }
+.bento { margin-top: 44px; display: grid; grid-template-columns: 1.15fr 1fr; grid-template-rows: repeat(3, auto); gap: 14px; }
+.cell { border-radius: var(--r); padding: 26px; display: flex; flex-direction: column; justify-content: space-between; gap: 18px; min-width: 0; background: var(--surface); border: 1px solid var(--line); }
+.cell .nm { font: 500 15px/1.3 var(--sans); color: var(--muted); }
+.cell .pr { font: 600 clamp(30px, 3.4vw, 44px)/1 var(--sans); letter-spacing: -0.04em; font-variant-numeric: tabular-nums; }
+.cell .nt { font-size: 15px; color: var(--muted); }
+.cell.big { grid-row: 1 / span 3; background: var(--accent); border-color: var(--accent); color: var(--on-accent); padding: 34px; }
+.cell.big .nm, .cell.big .nt { color: rgba(255,255,255,.82); }
+.cell.big .pr { font-size: clamp(48px, 7vw, 92px); }
+.cell.tint { background: var(--tint); border-color: transparent; }
+.cell.dash { background: transparent; border-style: dashed; }
+.note { margin-top: 20px; color: var(--muted); font-size: 15px; }
+
+/* RUBROS */
+.fit { padding-block: 100px; border-top: 1px solid var(--line); }
+.chips { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 32px; }
+.chips span { padding: 12px 18px; border-radius: var(--r); background: var(--surface); border: 1px solid var(--line); font: 500 17px/1 var(--sans); }
+.chips span:nth-child(3n+1) { background: var(--tint); border-color: transparent; }
+
+/* FAQ */
+.faq-sec { padding-block: 100px; border-top: 1px solid var(--line); }
+.faq { margin-top: 36px; max-width: 800px; }
+details { border-top: 1px solid var(--line); padding-block: 22px; }
+details:last-child { border-bottom: 1px solid var(--line); }
+summary { cursor: pointer; font: 600 clamp(18px, 2vw, 22px)/1.3 var(--sans); letter-spacing: -0.02em; list-style: none; display: flex; justify-content: space-between; gap: 16px; }
+summary::-webkit-details-marker { display: none; }
+summary::after { content: "+"; font: 400 26px/1 var(--mono); color: var(--accent-text); transition: transform .3s var(--ease); }
+details[open] summary::after { transform: rotate(45deg); }
+details p { margin-top: 12px; color: var(--muted); max-width: 38em; }
+
+/* CIERRE */
+.close { background: var(--accent); color: var(--on-accent); padding-block: 110px; }
+.close h2 { font-size: clamp(38px, 7vw, 104px); max-width: 11em; line-height: .96; }
+.close p { margin-top: 24px; max-width: 30em; font-size: 20px; color: rgba(255,255,255,.88); }
+.close .cta { align-items: center; margin-top: 36px; }
+.close .num { font: 500 20px/1 var(--mono); user-select: all; }
+footer { padding-block: 28px; color: var(--muted); font-size: 14px; }
+footer .in { display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+
+@media (max-width: 860px) {
+  .hero { grid-template-columns: 1fr; gap: 40px; min-height: 0; padding-block: 16px 56px; }
+  h1 { font-size: clamp(30px, 8.4vw, 56px); }
+  .how-grid { grid-template-columns: 1fr; gap: 40px; }
+  .sticky { position: static; }
+  .bento { grid-template-columns: 1fr; }
+  .cell.big { grid-row: auto; }
+  .pain, .how, .prices, .fit, .faq-sec { padding-block: 72px; }
+  .close { padding-block: 72px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .hero > div:first-child > * { animation: none; }
+  .phone, .row, .btn { transition: none; }
+}
+html{color-scheme:light dark}body{margin:0}img{max-width:100%}[hidden]{display:none!important}
+</style>
+</head>
+<body>
+
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="logo" viewBox="0 0 40 40">
+    <rect width="40" height="40" rx="10" fill="#2F55E0"/>
+    <g transform="translate(3 1)" fill="none">
+      <path d="M12 2.5l2.9 6.2 6.8.8-5 4.7 1.3 6.7L12 17.5 6 20.9l1.3-6.7-5-4.7 6.8-.8z" transform="translate(3 9) scale(.85)" fill="#F5B301" stroke="#F5B301" stroke-width="1" stroke-linejoin="round"/>
+      <path d="M23.2 10.6A13 13 0 0 1 23.2 27.4" stroke="#fff" stroke-width="2.6" stroke-linecap="round"/>
+      <path d="M26.2 8.1A17 17 0 0 1 26.2 29.9" stroke="#fff" stroke-width="2.6" stroke-linecap="round" opacity=".55"/>
+    </g>
+  </symbol>
+</svg>
+
+<div class="in">
+  <nav>
+    <a class="brand" href="#top" aria-label="UpStar, inicio"><svg><use href="#logo"/></svg><span>UpStar</span></a>
+    <a class="btn" href="https://wa.me/5492235569224?text=Hola%2C%20quiero%20la%20prueba%20gratis%20de%20UpStar">Pedir prueba gratis</a>
+  </nav>
+
+  <header class="hero" id="top">
+    <div>
+      <h1>Cocinás de 10.<br>Google te pone <span>3,9.</span></h1>
+      <p class="lead">Los clientes contentos se van sin opinar. Con UpStar acercan el celular a la mesa y califican en segundos.</p>
+      <div class="cta">
+        <a class="btn" href="https://wa.me/5492235569224?text=Hola%2C%20quiero%20la%20prueba%20gratis%20de%20UpStar">Pedir prueba gratis</a>
+        <a class="btn quiet" href="#precios">Ver precios</a>
+      </div>
+    </div>
+    <div class="rank" role="img" aria-label="Ejemplo: un local sube al primer puesto del listado de Google a medida que suma reseñas">
+      <div class="bar">Restaurantes cerca</div>
+      <div class="rows" id="rows"></div>
+      <div class="ft"><span id="added"><b>+0</b> reseñas con UpStar</span><span>Ejemplo ilustrativo</span></div>
+    </div>
+  </header>
+</div>
+
+<section class="pain">
+  <div class="in">
+    <h2 class="rv">El que comió mal, escribe.</h2>
+    <h2 class="now rv">El que comió bien, se va.</h2>
+    <h2 class="turn rv">Ahora también escribe.</h2>
+  </div>
+</section>
+
+<section class="shot">
+  <div class="in">
+    <img class="rv" src="img/mesa.jpg" width="2000" height="1493" alt="Pieza UpStar azul con NFC y código QR sobre la mesa de un restaurante" loading="lazy">
+  </div>
+</section>
+
+<section class="how" id="como">
+  <div class="in how-grid">
+    <div class="sticky">
+      <div class="stage" id="stage" data-s="3" role="img" aria-label="Un celular se acerca a la pieza UpStar y abre la pantalla de reseña con cinco estrellas">
+        <div class="piece">
+          <div class="r"><span>UpStar</span>
+            <div class="nfc"><span class="ring"></span>
+              <svg viewBox="0 0 44 44" fill="none" stroke="#8AA1FF" stroke-width="3.4" stroke-linecap="round"><path d="M14 14a11 11 0 0 1 0 16"/><path d="M21 9a19 19 0 0 1 0 26"/><path d="M28 4a27 27 0 0 1 0 36"/></svg>
+            </div>
+          </div>
+          <div class="qr"><svg id="qr" viewBox="0 0 25 25" shape-rendering="crispEdges"></svg></div>
+          <small>Acercá el celu o escaneá</small>
+        </div>
+        <div class="phone"><div class="screen">
+          <div class="lock"><b>21:14</b>Acercá al tag</div>
+          <div class="review"><span class="pl">Tu local</span><span class="as">¿Cómo estuvo?</span>
+            <span class="stars"><i>★</i><i>★</i><i>★</i><i>★</i><i>★</i></span><span class="pub">Publicar</span></div>
+        </div></div>
+      </div>
+    </div>
+    <div>
+      <h2 class="rv">Una pieza en la mesa.<br>Tres segundos.</h2>
+      <div class="items">
+        <div class="item rv"><h3>Acercar el celular</h3><p>El chip NFC abre tu ficha de Google. Funciona en iPhone XS o más nuevo y en la mayoría de los Android, sin instalar nada.</p></div>
+        <div class="item rv"><h3>Escanear el QR</h3><p>Al lado va un QR con el mismo destino, para los celulares viejos o con el NFC apagado.</p></div>
+        <div class="item rv"><h3>Elegir las estrellas</h3><p>El cliente cae en tu ficha con la reseña lista para escribir. Sin buscar el local, sin abrir Maps.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="shot">
+  <div class="in">
+    <img class="rv" src="img/toque.jpg" width="2000" height="1116" alt="Un cliente acerca su celular a la pieza UpStar sobre la mesa de un restaurante" loading="lazy">
+  </div>
+</section>
+
+<section class="prices" id="precios">
+  <div class="in">
+    <h2 class="rv">Pagás una vez.<br>Sin abono.</h2>
+    <p class="sub rv">Con el logo de tu local, el link configurado y la instalación incluida en Mar del Plata.</p>
+    <div class="bento">
+      <div class="cell big rv"><span class="nm">Pack Mesas x5</span><div><span class="pr">$60.000</span><p class="nt" style="margin-top:10px">$12.000 por pieza. Una en cada mesa.</p></div></div>
+      <div class="cell rv"><span class="nm">Pieza suelta</span><span class="pr">$15.000</span></div>
+      <div class="cell tint rv"><span class="nm">Pack Local x10</span><div><span class="pr">$100.000</span><p class="nt" style="margin-top:8px">Incluye la carta digital con NFC y QR.</p></div></div>
+      <div class="cell dash rv"><span class="nm">Reposición</span><div><span class="pr">$10.000</span><p class="nt" style="margin-top:8px">Si una se rompe o se pierde.</p></div></div>
+    </div>
+    <p class="note">Precios de referencia en pesos, sujetos a cambio.</p>
+  </div>
+</section>
+
+<section class="fit">
+  <div class="in">
+    <h2 class="rv">Sirve en cualquier local con público.</h2>
+    <div class="chips rv"><span>Restaurantes</span><span>Bares y cafés</span><span>Hoteles y hostels</span><span>Peluquerías</span><span>Consultorios</span><span>Gimnasios</span><span>Talleres</span><span>Kioscos</span></div>
+  </div>
+</section>
+
+<section class="faq-sec">
+  <div class="in">
+    <h2 class="rv">Lo que suelen preguntar</h2>
+    <div class="faq">
+      <details><summary>Ya tengo un QR en la mesa</summary><p>Esto se suma. Con el NFC no abren la cámara: acercan el celular y listo. El QR queda al lado como respaldo.</p></details>
+      <details><summary>¿Y si me dejan una mala reseña?</summary><p>Las malas las podés recibir igual. Con más reseñas buenas, una mala pesa menos en el puntaje, y podés responderla.</p></details>
+      <details><summary>¿Tengo que hacer algo yo?</summary><p>Pasarme el link de tu ficha de Google. Yo dejo la pieza lista e instalada. Al traer la cuenta, alcanza con decir "si te gustó, dejanos una reseña".</p></details>
+      <details><summary>¿Sirve para mostrar la carta?</summary><p>Sí. La pieza abre la carta de tu propia página. Si cambiás precios, editás tu web como siempre y el link sigue igual.</p></details>
+      <details><summary>¿Y si el celular es viejo?</summary><p>Por eso cada pieza trae el QR. Cualquier cámara lo lee.</p></details>
+    </div>
+  </div>
+</section>
+
+<section class="close" id="contacto">
+  <div class="in">
+    <h2 class="rv">Te dejo una de prueba.</h2>
+    <p class="rv">Dos semanas en tu local, sin cargo. Si la usan, seguimos. Si no, la retiro.</p>
+    <div class="cta rv">
+      <a class="btn on-accent" href="https://wa.me/5492235569224?text=Hola%2C%20quiero%20la%20prueba%20gratis%20de%20UpStar">Pedir prueba gratis</a>
+      <span class="num">223 556-9224</span>
+    </div>
+  </div>
+</section>
+
+<footer><div class="in"><span>UpStar, Mar del Plata</span><span>Piezas NFC y QR para reseñas y cartas</span></div></footer>
+
+<script>
+(function () {
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // QR decorativo de la pieza (no es un código real)
+  var qr = document.getElementById('qr'), n = 25, s = 11, out = '';
+  function finder(x, y) {
+    return '<rect x="' + x + '" y="' + y + '" width="7" height="7" fill="#0E1220"/><rect x="' + (x + 1) + '" y="' + (y + 1) + '" width="5" height="5" fill="#fff"/><rect x="' + (x + 2) + '" y="' + (y + 2) + '" width="3" height="3" fill="#0E1220"/>';
+  }
+  for (var y = 0; y < n; y++) for (var x = 0; x < n; x++) {
+    if ((x < 8 && y < 8) || (x > n - 9 && y < 8) || (x < 8 && y > n - 9)) continue;
+    s = (s * 9301 + 49297) % 233280;
+    if (s / 233280 > 0.52) out += '<rect x="' + x + '" y="' + y + '" width="1" height="1" fill="#0E1220"/>';
+  }
+  qr.innerHTML = out + finder(0, 0) + finder(n - 7, 0) + finder(0, n - 7);
+
+  // Ranking: "Tu local" sube de puesto al sumar reseñas (cambio de estado que explica el producto).
+  // Ejemplo ilustrativo con nombres inventados.
+  var H = 74, box = document.getElementById('rows'), added = document.getElementById('added');
+  var data = [
+    { n: 'La Esquina', r: 4.6, c: 212 },
+    { n: 'Bodegón del Puerto', r: 4.5, c: 187 },
+    { n: 'Casa Bruno', r: 4.3, c: 151 },
+    { n: 'Tu local', r: 3.9, c: 38, me: true }
+  ];
+  var els = data.map(function (d) {
+    var el = document.createElement('div');
+    el.className = 'row' + (d.me ? ' me' : '');
+    el.innerHTML = '<span class="pos"></span><span class="nm"></span><span class="sc"></span>';
+    box.appendChild(el);
+    return el;
+  });
+  function score(d) { return d.r * Math.log(d.c + 1); }
+  function fmt(v) { return v.toFixed(1).replace('.', ','); }
+  function draw(t) {
+    var me = data[3];
+    me.c = Math.round(38 + t * 230);
+    me.r = 3.9 + t * 0.9;
+    var order = data.slice().sort(function (a, b) { return score(b) - score(a); });
+    order.forEach(function (d, i) {
+      var el = els[data.indexOf(d)];
+      el.style.transform = 'translateY(' + i * H + 'px)';
+      el.querySelector('.pos').textContent = i + 1;
+      el.querySelector('.nm').innerHTML = d.n + '<small>' + d.c + ' reseñas</small>';
+      el.querySelector('.sc').textContent = fmt(d.r);
+    });
+    added.innerHTML = '<b>+' + (me.c - 38) + '</b> reseñas con UpStar';
+  }
+  draw(1);
+  if (!reduce) {
+    var t = 0, hold = 0;
+    draw(0);
+    setInterval(function () {
+      if (hold > 0) { hold--; return; }
+      if (t >= 1) { t = 0; draw(0); hold = 6; return; }
+      t = Math.min(1, t + 0.011);
+      draw(t);
+      if (t >= 1) hold = 34;
+    }, 90);
+  }
+
+  // Demo del toque: el celular se acerca, la pantalla cambia, se llenan las estrellas.
+  var st = document.getElementById('stage'), timers = [];
+  function set(v) { st.setAttribute('data-s', v); }
+  function later(fn, ms) { timers.push(setTimeout(fn, ms)); }
+  function run() {
+    timers.forEach(clearTimeout); timers = [];
+    set(0);
+    later(function () { set(1); }, 900);
+    later(function () { set(2); }, 1900);
+    later(function () { set(3); }, 2500);
+    later(run, 8200);
+  }
+  if (!reduce) { st.addEventListener('click', run); later(run, 2200); }
+
+  // Aparición al hacer scroll, con IntersectionObserver
+  if (!reduce && 'IntersectionObserver' in window) {
+    var io = new IntersectionObserver(function (es) {
+      es.forEach(function (e) { if (e.isIntersecting) { e.target.classList.remove('pre'); io.unobserve(e.target); } });
+    }, { threshold: 0.15 });
+    document.querySelectorAll('.rv').forEach(function (el) {
+      if (el.getBoundingClientRect().top > innerHeight * 0.9) { el.classList.add('pre'); io.observe(el); }
+    });
+  }
+})();
+</script>
+
+</body>
+</html>
